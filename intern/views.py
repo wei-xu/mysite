@@ -6,7 +6,9 @@ from intern.models import Blog
 def index(request):
 	latest_blog_list = Blog.objects.order_by('-publish_time')[:]
 	context = {'latest_blog_list': latest_blog_list}
+	# dictionary key refers to the variable in {{}} of the same name.
 	return render(request, 'intern/index.html', context)
+	# test github syncronization
 
 class DetailView(generic.DetailView):
 	"""docstring for DetailView"""
