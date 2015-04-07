@@ -10,6 +10,10 @@ def index(request):
 	return render(request, 'intern/index.html', context)
 	# test github syncronization
 
+def index_detail(request):
+	return render(request, 'intern/index_detail.html')
+
+
 class DetailView(generic.DetailView):
 	"""docstring for DetailView"""
 	model = Blog

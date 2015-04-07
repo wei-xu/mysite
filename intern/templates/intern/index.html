@@ -2,7 +2,7 @@
     <ul>
     {% for blog in latest_blog_list %}
         <!-- <li><a href="/blog/{{ blog.id }}/">{{ blog.title }}</a></li> -->
-        <li><a href="{% url 'intern:detail' blog.id %}">{{ blog.title }}</a></li>
+        <li><a href="{% url 'intern:detail' blog.id %}" target="detail_right">{{ blog.title }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
