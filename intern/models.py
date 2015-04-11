@@ -9,8 +9,13 @@ from django.db import models
 
 class Blog(models.Model):
 	"""docstring for Blog"""
+	BELONGINGS = (
+			('Pe','Personal'),
+			('Pu','Public'),
+		)
 	title = models.CharField(max_length=60)
 	author = models.CharField(max_length=40)
+	belonging = models.CharField(max_length=20, choices=BELONGINGS, default=BELONGINGS[0][0])
 	content = models.TextField()
 	publish_time = models.DateTimeField('date published')
 	def __str__(self):
