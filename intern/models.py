@@ -13,7 +13,7 @@ class Blog(models.Model):
 			('Pe','Personal'),
 			('Pu','Public'),
 		)
-	title = models.CharField(max_length=60)
+	title = models.CharField('title',max_length=60)
 	author = models.CharField(max_length=40)
 	belonging = models.CharField(max_length=20, choices=BELONGINGS, default=BELONGINGS[0][0])
 	content = models.TextField()

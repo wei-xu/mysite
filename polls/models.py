@@ -20,3 +20,21 @@ class Choice(models.Model):
 	votes = models.IntegerField(default = 0)
 	def __str__(self):
 		return self.choice_text
+
+class Person(models.Model):
+	"""docstring for Person"""
+	name = models.CharField(max_length=100)
+	def __str__(self):
+		return self.name
+
+class Group(models.Model):
+	name = models.CharField(max_length=100)
+	members = models.ManyToManyField(Person, through='Membership')	
+	def __str__(self):
+		return self.name
+
+class Membership(models.Model):
+	person = models.ForeignKey(Person)
+	group = models.ForeignKey(Group)
+	date_joined = models.DateField()
+	invite_reason = models.CharField(max_length=64)
