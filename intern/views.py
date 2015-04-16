@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
+from django import forms
 from django.views import generic
+from django.http import HttpResponseRedirect
 
 from intern.models import Blog
 # Create your views here.
@@ -18,3 +20,28 @@ class DetailView(generic.DetailView):
 	"""docstring for DetailView"""
 	model = Blog
 	template_name = 'intern/detail.html'		
+
+# class BlogForm(forms.Form):
+# 	title = forms.CharField()
+class BlogForm(forms.ModelForm):
+	class Meta:
+		model = Blog
+		fields = ['title', 'author', 'content']
+
+def add_blog(request):
+	if request.method == "POST":
+		form = BlogForm(request.POST)
+		if form.is_valid():
+			# try:
+			# 	form.save()
+			# except:
+			# 	return render(request, 'intern/add_blog.html', {
+			# 		'error_message': "Connection failed",
+			# 		'form': form,
+			# 		})
+			form.save()
+			return HttpResponseRedirect('/intern/index_detail')
+	else:
+		form = BlogForm()
+	return render(request, 'intern/add_blog.html', {'form':form})
+	

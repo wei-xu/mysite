@@ -1,5 +1,5 @@
 from django.db import models
-
+from datetime import datetime
 # Create your models here.
 # class Author(models.Model):
 # 	"""docstring for Author"""
@@ -17,7 +17,7 @@ class Blog(models.Model):
 	author = models.CharField(max_length=40)
 	belonging = models.CharField(max_length=20, choices=BELONGINGS, default=BELONGINGS[0][0])
 	content = models.TextField()
-	publish_time = models.DateTimeField('date published')
+	publish_time = models.DateTimeField('date published', default=datetime.now)
 	def __str__(self):
 		return self.title	
 		
