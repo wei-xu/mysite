@@ -20,4 +20,8 @@ class Blog(models.Model):
 	publish_time = models.DateTimeField('date published', default=datetime.now)
 	def __str__(self):
 		return self.title	
+
+
+class Document(models.Model):
+    docfile = models.FileField(upload_to='documents/%Y/%m')
 		

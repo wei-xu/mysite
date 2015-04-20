@@ -1,9 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
+from django.template import RequestContext
 from django import forms
 from django.views import generic
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
 
-from intern.models import Blog
+from intern.models import Blog, Document
+from intern.forms import DocumentForm
 # Create your views here.
 def index(request):
 	latest_blog_list = Blog.objects.order_by('-publish_time')[:]
@@ -44,4 +47,33 @@ def add_blog(request):
 	else:
 		form = BlogForm()
 	return render(request, 'intern/add_blog.html', {'form':form})
+
+
+def add_file(request):
+    # Handle file upload
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            newdoc = Document(docfile = request.FILES['docfile'])
+            newdoc.save()
+
+            # Redirect to the document list after POST
+            return HttpResponseRedirect(reverse('intern:add_file'))
+    else:
+        form = DocumentForm() # A empty, unbound form
+
+    # Load documents for the list page
+    documents = Document.objects.all()
+
+    # Render list page with the documents and the form
+    return render_to_response(
+        'intern/add_file.html',
+        {'documents': documents, 'form': form},
+        context_instance=RequestContext(request)
+    )
+
+
+
+
+
 	

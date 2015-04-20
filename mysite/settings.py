@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -67,11 +68,13 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'NAME': 'postgres',
         'USER':'postgres',
-        'PASSWORD': 'yuxin09211',
+        'PASSWORD': '123456',
         'HOST':'localhost',
         'PORT':'5432',
     }
 }
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
+MEDIA_URL = '/media/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
