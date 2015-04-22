@@ -4,6 +4,9 @@ from django import forms
 from django.views import generic
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+## to redirect iframe to its parent view, we need TemplateResponse
+#  to load a middle html
+from django.template.response import TemplateResponse
 
 from intern.models import Blog, Document
 from intern.forms import DocumentForm, BlogForm
@@ -76,7 +79,8 @@ def add_blog(request):
 			# 		'form': form,
 			# 		})
 			form.save()
-			return HttpResponseRedirect(reverse('intern:study_center'))
+			# return HttpResponseRedirect(reverse('intern:study_center'))
+			return TemplateResponse(request, 'intern/redirect_url.html', {'redirect_url': reverse('intern:study_center')})
 	else:
 		form = BlogForm()
 	return render(request, 'intern/add_blog.html', {'form':form})

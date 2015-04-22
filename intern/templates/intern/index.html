@@ -109,7 +109,8 @@
             {% for filename, file in latest_file_list.items %}
     					<tr>
     						<th scope="row"> {{forloop.counter}} </th>
-    						<td> {{ filename }} </td>
+    						<!-- <td> {{ filename }} </td> -->
+                <td><a href="{{ file.docfile.url }}">{{ filename }}</a></td>
     						<td> {{ file.uploader }} </td>
     						<td> {{ file.upload_time }} </td>
     					</tr>
