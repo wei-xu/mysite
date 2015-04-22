@@ -24,4 +24,5 @@ class Blog(models.Model):
 
 class Document(models.Model):
     docfile = models.FileField(upload_to='documents/%Y/%m')
-		
+    upload_time = models.DateTimeField('date uploaded', default=datetime.now)
+    uploader = models.CharField('uploader', max_length=40, default='undefined')

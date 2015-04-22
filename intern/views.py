@@ -6,30 +6,63 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
 from intern.models import Blog, Document
-from intern.forms import DocumentForm
+from intern.forms import DocumentForm, BlogForm
 # Create your views here.
 def index(request):
-	latest_blog_list = Blog.objects.order_by('-publish_time')[:]
-	context = {'latest_blog_list': latest_blog_list}
+	blogs = Blog.objects.order_by('-publish_time')[:6]
+	documents = Document.objects.order_by('-upload_time')[:3]
+	latest_file_list = {}
+	latest_blog_list = {}
+	for document in documents:
+		latest_file_list[document.docfile.name.split('/')[-1]] = document
+	for blog in blogs:
+		latest_blog_list[blog.title] = blog.content[:20]
+	context = {
+            'latest_blog_list': latest_blog_list,
+            'latest_file_list': latest_file_list,
+            }
 	# dictionary key refers to the variable in {{}} of the same name.
 	return render(request, 'intern/index.html', context)
 	# test github syncronization
 
 def index_detail(request):
-	return render(request, 'intern/index_detail.html')
+	latest_blog_list = Blog.objects.order_by('-publish_time')[:]
+	context = {'latest_blog_list': latest_blog_list}
+	# dictionary key refers to the variable in {{}} of the same name.
+	return render(request, 'intern/study_center.html', context)
 
+def file_center(request):
+	# Handle file upload
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            newdoc = Document(docfile = request.FILES['docfile'])
+            newdoc.save()
+
+            # Redirect to the document list after POST
+            return HttpResponseRedirect(reverse('intern:file_center'))
+    else:
+        form = DocumentForm() # A empty, unbound form
+
+    # Load documents for the list page
+    documents = Document.objects.all()
+    file_list = {}
+    for document in documents:
+        file_list[document.docfile.name.split('/')[-1]] = document
+
+    # Render list page with the documents and the form
+    return render_to_response(
+        'intern/file_center.html',
+        {'documents': documents, 'form': form, 'file_list': file_list},
+        context_instance=RequestContext(request),
+    )
+	#return render(request, 'intern/file_center.html')
 
 class DetailView(generic.DetailView):
 	"""docstring for DetailView"""
 	model = Blog
 	template_name = 'intern/detail.html'		
 
-# class BlogForm(forms.Form):
-# 	title = forms.CharField()
-class BlogForm(forms.ModelForm):
-	class Meta:
-		model = Blog
-		fields = ['title', 'author', 'content']
 
 def add_blog(request):
 	if request.method == "POST":
@@ -43,7 +76,7 @@ def add_blog(request):
 			# 		'form': form,
 			# 		})
 			form.save()
-			return HttpResponseRedirect('/intern/index_detail')
+			return HttpResponseRedirect(reverse('intern:study_center'))
 	else:
 		form = BlogForm()
 	return render(request, 'intern/add_blog.html', {'form':form})
@@ -54,7 +87,7 @@ def add_file(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Document(docfile = request.FILES['docfile'])
+            newdoc = Document(docfile = request.FILES['docfile'], uploader=form.uploader)
             newdoc.save()
 
             # Redirect to the document list after POST
@@ -64,16 +97,13 @@ def add_file(request):
 
     # Load documents for the list page
     documents = Document.objects.all()
+    file_list = {}
+    for document in documents:
+        file_list[document.docfile.name.split('/')[-1]] = document
 
     # Render list page with the documents and the form
     return render_to_response(
         'intern/add_file.html',
-        {'documents': documents, 'form': form},
-        context_instance=RequestContext(request)
+        {'documents': documents, 'form': form, 'file_list': file_list},
+        context_instance=RequestContext(request),
     )
-
-
-
-
-
-	
