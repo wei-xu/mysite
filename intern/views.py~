@@ -25,7 +25,7 @@ def index(request):
     
 	for blog in blogs:
 #		latest_blog_list[blog.title] = blog.content[:20]
-		latest_blog_list.append((blog.title, blog.content[:20], blog.publish_time, blog))
+		latest_blog_list.append((blog.title, blog.content[:20], blog.publish_time))
 #	for blog in blogs:
 #		latest_blog_list.append(blog, blog.publish_time)
 	latest_blog_list = sorted(latest_blog_list, key=lambda x:x[2], reverse=True)

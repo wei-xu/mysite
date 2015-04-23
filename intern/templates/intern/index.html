@@ -152,9 +152,9 @@
 
     	<div class="row">
         {% if latest_blog_list %}
-          {% for blog_title, blog_content, blog_pub_time in latest_blog_list %}
+          {% for blog_title, blog_content, blog_pub_time, blog in latest_blog_list %}
           <div class="col-md-4">
-            <h3><a href="{% url 'intern:study_center' %}">{{blog_title}}</a></h3>
+            <h3><a href="{% url 'intern:study_center' blog.id %}">{{blog_title}}</a></h3>
             <!-- <h3><a href="{% url 'intern:study_center' %}"></a>{{blog_title}}</h3> -->
             <p> {{blog_content}}... </p>
           </div>

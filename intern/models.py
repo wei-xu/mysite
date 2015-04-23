@@ -18,7 +18,7 @@ class Blog(models.Model):
 	belonging = models.CharField(max_length=20, choices=BELONGINGS, default=BELONGINGS[0][0])
 	content = models.TextField()
 	publish_time = models.DateTimeField('date published', default=datetime.now)
-	def __str__(self):
+	def __unicode__(self):
 		return self.title	
 
 
@@ -26,3 +26,5 @@ class Document(models.Model):
     docfile = models.FileField(upload_to='documents/%Y/%m')
     upload_time = models.DateTimeField('date uploaded', default=datetime.now)
     uploader = models.CharField('uploader', max_length=40, default='undefined')
+    def __unicode__(self):
+    	return self.docfile.name.split('/')[-1]

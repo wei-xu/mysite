@@ -126,7 +126,11 @@
       			</div>
       			<div class="col-md-8">
       				<p class="help-block">this is the place where article exists.</p>
-      				<iframe src="" name="detail" height="100%" width="100%" frameborder="0" scrolling="no" onload='javascript:resizeIframe(this)'></iframe>
+      				{% if blog_id %}
+      					<iframe src="{% url 'intern:detail' blog_id %}" name="detail" height="100%" width="100%" frameborder="0" scrolling="no" onload='javascript:resizeIframe(this)'></iframe>
+      				{% else %}
+      					<iframe src="" name="detail" height="100%" width="100%" frameborder="0" scrolling="no" onload='javascript:resizeIframe(this)'></iframe>
+      				{% endif %}
       			</div>
       		</div>
       	</div>
