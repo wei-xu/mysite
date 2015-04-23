@@ -14,12 +14,21 @@ from intern.forms import DocumentForm, BlogForm
 def index(request):
 	blogs = Blog.objects.order_by('-publish_time')[:6]
 	documents = Document.objects.order_by('-upload_time')[:3]
-	latest_file_list = {}
-	latest_blog_list = {}
+	latest_file_list = []
+	latest_blog_list = []
+	# for document in documents:
+	# 	latest_file_list[document.docfile.name.split('/')[-1]] = document
 	for document in documents:
-		latest_file_list[document.docfile.name.split('/')[-1]] = document
+		# file_list[document.docfile.name.split('/')[-1]] = (document, document.upload_time)
+		latest_file_list.append((document.docfile.name.split('/')[-1],document, document.upload_time))
+	latest_file_list = sorted(latest_file_list, key=lambda d:d[2], reverse=True)
+    
 	for blog in blogs:
-		latest_blog_list[blog.title] = blog.content[:20]
+#		latest_blog_list[blog.title] = blog.content[:20]
+		latest_blog_list.append((blog.title, blog.content[:20], blog.publish_time))
+#	for blog in blogs:
+#		latest_blog_list.append(blog, blog.publish_time)
+	latest_blog_list = sorted(latest_blog_list, key=lambda x:x[2], reverse=True)
 	context = {
             'latest_blog_list': latest_blog_list,
             'latest_file_list': latest_file_list,
@@ -29,7 +38,11 @@ def index(request):
 	# test github syncronization
 
 def index_detail(request):
-	latest_blog_list = Blog.objects.order_by('-publish_time')[:]
+	latest_blog_list = Blog.objects.order_by('-publish_time')
+#	blogs = Blog.objects.order_by('-publish_time')[:]
+#	for blog in blogs:
+#		latest_blog_list.append(blog, blog.publish_time)
+#	latest_blog_list = sorted(latest_blog_list, key=lambda x:x[1], reverse=True)
 	context = {'latest_blog_list': latest_blog_list}
 	# dictionary key refers to the variable in {{}} of the same name.
 	return render(request, 'intern/study_center.html', context)
@@ -49,9 +62,12 @@ def file_center(request):
 
     # Load documents for the list page
     documents = Document.objects.all()
-    file_list = {}
+    file_list_bak = {}
+    file_list = []
     for document in documents:
-        file_list[document.docfile.name.split('/')[-1]] = document
+        # file_list[document.docfile.name.split('/')[-1]] = (document, document.upload_time)
+        file_list.append((document.docfile.name.split('/')[-1],document, document.upload_time))
+    file_list = sorted(file_list, key=lambda d:d[2], reverse=True)
 
     # Render list page with the documents and the form
     return render_to_response(

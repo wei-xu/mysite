@@ -137,13 +137,13 @@
                       </tr>
                     </thead>
                     <tbody>
-                      {% for key, value in file_list.items %}
+                      {% for filename_x, file_x, file_time_x in file_list %}
                       <tr>
                         <td colspan="3">
-                          <a href="{{ value.docfile.url }}">{{ key }}</a>
+                          <a href="{{ file_x.docfile.url }}">{{ filename_x }}</a>
                         </td>
-                        <td colspan="2">{{ value.uploader }}</td>
-                        <td colspan="2">{{ value.upload_time }}</td>
+                        <td colspan="2">{{ file_x.uploader }}</td>
+                        <td colspan="2">{{ file_time_x }}</td>
                         <td>
                           <form action="#file_operation" method="post">
                             <button class="btn btn-default btn-sm" type="button">Download</button>

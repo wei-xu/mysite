@@ -106,13 +106,13 @@
     					</tr>
     				</thead>
     				<tbody>
-            {% for filename, file in latest_file_list.items %}
+            {% for filename_x, file_x, file_time_x in latest_file_list %}
     					<tr>
     						<th scope="row"> {{forloop.counter}} </th>
     						<!-- <td> {{ filename }} </td> -->
-                <td><a href="{{ file.docfile.url }}">{{ filename }}</a></td>
-    						<td> {{ file.uploader }} </td>
-    						<td> {{ file.upload_time }} </td>
+                <td><a href="{{ file_x.docfile.url }}">{{ filename_x }}</a></td>
+    						<td> {{ file_x.uploader }} </td>
+    						<td> {{ file_x.upload_time }} </td>
     					</tr>
             {% endfor %}
 <!--     					<tr>
@@ -152,9 +152,10 @@
 
     	<div class="row">
         {% if latest_blog_list %}
-          {% for blog_title, blog_content in latest_blog_list.items %}
+          {% for blog_title, blog_content, blog_pub_time in latest_blog_list %}
           <div class="col-md-4">
-            <h3>{{blog_title}}</h3>
+            <h3><a href="{% url 'intern:study_center' %}">{{blog_title}}</a></h3>
+            <!-- <h3><a href="{% url 'intern:study_center' %}"></a>{{blog_title}}</h3> -->
             <p> {{blog_content}}... </p>
           </div>
           {% endfor %}
