@@ -16,4 +16,13 @@ urlpatterns = patterns('',
 	# intern/file_center
 	url(r'^file_center/$', views.file_center, name='file_center'),
 	url(r'^add_file/$', views.add_file, name='add_file'),
+
+	url(r'^wiki/$', views.wiki_index, name='wiki_index'),
+
+	# the order of the following two lines cannot be reversed,
+	# since the pattern in the second line incorporates that in the 
+	# first line 
+	url(r'^wiki/(?P<wiki_pagename>[\s\S]+)/edit/$', views.wiki_edit, name='wiki_edit'),
+	url(r'^wiki/(?P<wiki_pagename>[\s\S]+?)/', views.wiki_index, name='wiki_index'),
+
 )

@@ -7,9 +7,10 @@ from django.core.urlresolvers import reverse
 ## to redirect iframe to its parent view, we need TemplateResponse
 #  to load a middle html
 from django.template.response import TemplateResponse
+from django.forms.models import inlineformset_factory
 
-from intern.models import Blog, Document
-from intern.forms import DocumentForm, BlogForm
+from .models import Blog, Document, Wiki, WikiEditHistory
+from .forms import DocumentForm, BlogForm, WikiForm, WikiEditHistoryForm
 # Create your views here.
 def index(request):
 	blogs = Blog.objects.order_by('-publish_time')[:6]
@@ -128,4 +129,67 @@ def add_file(request):
         context_instance=RequestContext(request),
     )
 
+def wiki_index(request, wiki_pagename=''):
+    if wiki_pagename:
+        # failed when change to objects.filter(wiki_pagename=wiki_pagename)
+        # page = Wiki.objects.get(wiki_pagename=wiki_pagename)
+        print wiki_pagename
+        # wiki_pagename should be unique
+        page = get_object_or_404(Wiki, wiki_pagename=wiki_pagename)
+        if page:
+            context = {'page': page, 'is_existing': True}
+            return render(request, 'intern/wiki_page.html', context)
+        else:
+            context = {'page': page, 'is_existing': False}
+            return render(request, 'intern/wiki_edit.html', context)
+    else:
+        wiki_list = Wiki.objects.all()
+        context = {'wiki_list': wiki_list}
+        return render(request, 'intern/wiki_index.html', context)
 
+# def wiki_edit(request, wiki_pagename):
+#     page = Wiki.objects.get(wiki_pagename=wiki_pagename)
+#     context = {
+#             'wiki_pagename': page.wiki_pagename,
+#             'wiki_content': page.wiki_content,
+#     }
+#     return render(request, 'intern/wiki_edit.html', context)
+
+def wiki_edit(request, wiki_pagename):
+    page = Wiki.objects.get(wiki_pagename=wiki_pagename)
+    if request.method == 'POST':
+        form1 = WikiForm(request.POST)
+        form2 = WikiEditHistoryForm(request.POST)
+        if form1.is_valid() and form2.is_valid():
+            page.wiki_pagename = form1.wiki_pagename
+            page.wiki_content = form1.wiki_content
+            page.edit_reason = form2.edit_reason
+            page.save()
+        wikiFrom = Wiki(request.POST)
+        return HttpResponseRedirect(reverse('intern:wiki_index', args=[wiki_pagename]))
+    else:
+        wikiForm = WikiForm(initial={'wiki_pagename': page.wiki_pagename, 'wiki_content': page.wiki_content})
+        wikiEditHistoryForm = WikiEditHistoryForm()
+        context = {
+                'wikiEditHistoryForm': wikiEditHistoryForm,
+                'wikiForm': wikiForm,
+                'wiki_pagename': wiki_pagename,
+        }
+        return render(request, 'intern/wiki_edit.html', context)
+
+
+# def wiki_edit(request, wiki_pagename):
+#     WEHInlineFormSet = inlineformset_factory(Wiki, WikiEditHistory, form=WikiForm)
+#     page = Wiki.objects.get(wiki_pagename=wiki_pagename)
+#     if request.method == 'POST':
+#         wikiFrom = Wiki(request.POST)
+#         return HttpResponseRedirect(reverse('intern:wiki_index', args=[wiki_pagename]))
+#     else:
+#         wehInlineFormSet = WEHInlineFormSet()
+#         wikiForm = WikiForm()
+#         context = {
+#                 'wikiForm': wikiForm,
+#                 'wehInlineFormSet': wehInlineFormSet,
+#                 'wiki_pagename': wiki_pagename,
+#         }
+#         return render(request, 'intern/wiki_edit.html', context)

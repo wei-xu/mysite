@@ -1,0 +1,9 @@
+wiki index
+{% if wiki_list %}
+<ul>
+	{% for page in wiki_list %}
+	<li><a href="{% url 'intern:wiki_index' page.wiki_pagename %}">{{ page.wiki_pagename }}</a></li>
+	{% endfor %}
+</ul>
+{% endif %}
+

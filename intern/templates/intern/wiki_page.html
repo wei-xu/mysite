@@ -1,0 +1,8 @@
+wiki page
+{% if is_existing %}
+<p>this page exists</p>
+{% endif %}
+{{ page.wiki_pagename }}
+<hr>
+<a href="{% url 'intern:wiki_edit' page.wiki_pagename %}">Edit</a>
+<p>{{ page.wiki_content }}</p>

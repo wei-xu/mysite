@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from intern.models import Document, Blog
+from .models import Document, Blog, Wiki, WikiEditHistory
 
 class DocumentForm(forms.Form):
     docfile = forms.FileField(
@@ -17,3 +17,16 @@ class BlogForm(forms.ModelForm):
 		# widgets = {
 		# 	'content': forms.Textarea(attrs={'cols':50, 'rows':5}),
 		# }
+
+class WikiForm(forms.ModelForm):
+	# wiki_pagename = forms.CharField(max_length=60)
+	# wiki_content = forms.CharField(widget=forms.Textarea)
+	class Meta:
+		model = Wiki
+		fields = ['wiki_pagename', 'wiki_content']	
+
+class WikiEditHistoryForm(forms.ModelForm):
+	# edit_reason = forms.CharField(max_length=200)
+	class Meta:
+		model = WikiEditHistory
+		fields = ['edit_reason']

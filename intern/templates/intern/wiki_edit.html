@@ -1,0 +1,7 @@
+<p>you can edit your wiki</p>
+<form action="{% url 'intern:wiki_edit' wiki_pagename %}" method="post">
+{% csrf_token %}
+	{{ wikiForm }}
+	{{ wikiEditHistoryForm }}	
+	<input type="submit" value="Save" />
+</form>

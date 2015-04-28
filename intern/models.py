@@ -28,3 +28,17 @@ class Document(models.Model):
     uploader = models.CharField('uploader', max_length=40, default='undefined')
     def __unicode__(self):
     	return self.docfile.name.split('/')[-1]
+
+
+class Wiki(models.Model):
+	wiki_pagename = models.CharField('pagename', max_length=60)
+	wiki_content = models.TextField('content')
+	def __unicode__(self):
+		return self.wiki_pagename
+
+class WikiEditHistory(models.Model):
+	edit_pagename = models.ForeignKey(Wiki)
+	edit_time = models.DateTimeField('edit time', default=datetime.now)
+	edit_reason = models.CharField('reason', max_length=200)
+	def __unicode__(self):
+		return self.edit_reason
