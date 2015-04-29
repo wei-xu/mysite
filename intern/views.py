@@ -161,9 +161,10 @@ def wiki_edit(request, wiki_pagename):
         form1 = WikiForm(request.POST)
         form2 = WikiEditHistoryForm(request.POST)
         if form1.is_valid() and form2.is_valid():
-            page.wiki_pagename = form1.wiki_pagename
-            page.wiki_content = form1.wiki_content
-            page.edit_reason = form2.edit_reason
+            page.wiki_pagename = form1.cleaned_data['wiki_pagename']
+            page.wiki_content = form1.cleaned_data['wiki_content']
+            # page.edit_reason = form2.cleaned_data['edit_reason']
+            form2.save()
             page.save()
         wikiFrom = Wiki(request.POST)
         return HttpResponseRedirect(reverse('intern:wiki_index', args=[wiki_pagename]))
