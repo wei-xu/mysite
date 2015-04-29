@@ -163,10 +163,13 @@ def wiki_edit(request, wiki_pagename):
         if form1.is_valid() and form2.is_valid():
             page.wiki_pagename = form1.cleaned_data['wiki_pagename']
             page.wiki_content = form1.cleaned_data['wiki_content']
-            # page.edit_reason = form2.cleaned_data['edit_reason']
-            form2.save()
+            new_edit_record = WikiEditHistory(edit_reason=form2.cleaned_data['edit_reason'])
+            # set WikiEditHistory object's foreign key as pagename, not
+            # the other way around.
+            # for example, page.edit_reason = new_edit_record is wrong
+            new_edit_record.edit_pagename = page
+            new_edit_record.save()
             page.save()
-        wikiFrom = Wiki(request.POST)
         return HttpResponseRedirect(reverse('intern:wiki_index', args=[wiki_pagename]))
     else:
         wikiForm = WikiForm(initial={'wiki_pagename': page.wiki_pagename, 'wiki_content': page.wiki_content})
@@ -178,19 +181,11 @@ def wiki_edit(request, wiki_pagename):
         }
         return render(request, 'intern/wiki_edit.html', context)
 
-
-# def wiki_edit(request, wiki_pagename):
-#     WEHInlineFormSet = inlineformset_factory(Wiki, WikiEditHistory, form=WikiForm)
-#     page = Wiki.objects.get(wiki_pagename=wiki_pagename)
-#     if request.method == 'POST':
-#         wikiFrom = Wiki(request.POST)
-#         return HttpResponseRedirect(reverse('intern:wiki_index', args=[wiki_pagename]))
-#     else:
-#         wehInlineFormSet = WEHInlineFormSet()
-#         wikiForm = WikiForm()
-#         context = {
-#                 'wikiForm': wikiForm,
-#                 'wehInlineFormSet': wehInlineFormSet,
-#                 'wiki_pagename': wiki_pagename,
-#         }
-#         return render(request, 'intern/wiki_edit.html', context)
+def wiki_view_history(request, wiki_pagename):
+    page = Wiki.objects.get(wiki_pagename=wiki_pagename)
+    history = WikiEditHistory.objects.filter(edit_pagename=page)
+    context = {
+            'history': history,
+            'wiki_pagename': page.wiki_pagename,
+    }
+    return render(request, 'intern/wiki_view_history.html', context)

@@ -1,0 +1,13 @@
+<p>View {{ wiki_pagename }} edit history.</p>
+<table border="1">
+<tr>
+	<td>Reason</td>
+	<td>Edit Time</td>
+</tr>
+{% for record in history %}
+<tr>
+	<td> {{ record.edit_reason }} </td>
+	<td> {{ record.edit_time }} </td>
+</tr>
+{% endfor %}
+</table>

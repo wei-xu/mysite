@@ -23,6 +23,7 @@ urlpatterns = patterns('',
 	# since the pattern in the second line incorporates that in the 
 	# first line 
 	url(r'^wiki/(?P<wiki_pagename>[\s\S]+)/edit/$', views.wiki_edit, name='wiki_edit'),
+	url(r'^wiki/(?P<wiki_pagename>[\s\S]+)/view_history/$', views.wiki_view_history, name='wiki_view_history'),
 	url(r'^wiki/(?P<wiki_pagename>[\s\S]+?)/', views.wiki_index, name='wiki_index'),
 
 )
