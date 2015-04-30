@@ -6,4 +6,4 @@ wiki page
 <hr>
 <a href="{% url 'intern:wiki_edit' page.wiki_pagename %}">Edit</a>
 <a href="{% url 'intern:wiki_view_history' page.wiki_pagename %}">View History</a>
-<p>{{ page.wiki_content }}</p>
+<p>{{ page.wiki_content|linebreaks }}</p>
