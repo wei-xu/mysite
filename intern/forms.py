@@ -18,18 +18,39 @@ class BlogForm(forms.ModelForm):
 		# 	'content': forms.Textarea(attrs={'cols':50, 'rows':5}),
 		# }
 
-class WikiForm(forms.ModelForm):
-	# wiki_pagename = forms.CharField(max_length=60)
-	# wiki_content = forms.CharField(widget=forms.Textarea)
-	class Meta:
-		model = Wiki
-		fields = ['wiki_pagename', 'wiki_content']	
+class WikiForm(forms.Form):
+	wiki_pagename = forms.CharField(
+					max_length=60,
+					label='edit_pagename',
+					widget=forms.TextInput(
+						attrs={
+							'class':'form-control',
+							'id':'edit_pagename',
+						}
+						)
+		)
+	wiki_content = forms.CharField(label='editContent', 
+								widget=forms.Textarea(attrs={'class':'form-control',
+								'id':'editContent'}
+								)
+							)
+	#　class Meta:
+	#	model = Wiki
+	#	fields = ['wiki_pagename', 'wiki_content']	
 
-class WikiEditHistoryForm(forms.ModelForm):
-	# edit_reason = forms.CharField(max_length=200)
-	class Meta:
-		model = WikiEditHistory
-		fields = ['edit_reason']
+class WikiEditHistoryForm(forms.Form):
+	edit_reason = forms.CharField(
+		label='edit_reason',
+		max_length=200,
+		widget=forms.TextInput(
+			attrs={
+			'class':'form-control',
+			'id':'edit_reason'
+			})
+		)
+	#class Meta:
+	#	model = WikiEditHistory
+	#	fields = ['edit_reason']
 
 # --- Register and Login
 # ---------------Register modules-----------------------------------
