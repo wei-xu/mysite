@@ -170,7 +170,7 @@ def wiki_edit(request, wiki_pagename):
             new_edit_record.edit_pagename = page
             new_edit_record.save()
             page.save()
-        return HttpResponseRedirect(reverse('intern:wiki_index', args=[wiki_pagename]))
+        return HttpResponseRedirect(reverse('intern:wiki_index', args=[form1.cleaned_data['wiki_pagename']]))
     else:
         wikiForm = WikiForm(initial={'wiki_pagename': page.wiki_pagename, 'wiki_content': page.wiki_content})
         wikiEditHistoryForm = WikiEditHistoryForm()
