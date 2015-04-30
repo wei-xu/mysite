@@ -9,8 +9,8 @@ from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.forms.models import inlineformset_factory
 
-from .models import Blog, Document, Wiki, WikiEditHistory
-from .forms import DocumentForm, BlogForm, WikiForm, WikiEditHistoryForm
+from .models import Blog, Document, Wiki, WikiEditHistory, User
+from .forms import DocumentForm, BlogForm, WikiForm, WikiEditHistoryForm, UserForm
 # Create your views here.
 def index(request):
 	blogs = Blog.objects.order_by('-publish_time')[:6]
@@ -189,3 +189,59 @@ def wiki_view_history(request, wiki_pagename):
             'wiki_pagename': page.wiki_pagename,
     }
     return render(request, 'intern/wiki_view_history.html', context)
+
+#Register
+def regist(req):
+    identify = True
+    if req.method == 'POST':
+        uf = UserForm(req.POST)
+        if uf.is_valid():
+            #Obtain form data
+            username = uf.cleaned_data['username']
+            password = uf.cleaned_data['password']
+            #Add onto database
+            user = User.objects.filter(username__exact = username)
+            if user:
+                identify = False
+                return render_to_response('intern/regist.html', {'uf':uf, 'identify':identify},context_instance=RequestContext(req))
+            else:
+                User.objects.create(username= username,password=password)
+                return HttpResponse('regist success!!')
+    else:
+        uf = UserForm()
+    return render_to_response('intern/regist.html',{'uf':uf, 'identify':identify}, context_instance=RequestContext(req))
+
+#Login
+def login(req):
+    identify = True
+    if req.method == 'POST':
+        uf = UserForm(req.POST)
+        if uf.is_valid():
+            #identify = True
+            username = uf.cleaned_data['username']
+            password = uf.cleaned_data['password']
+            #Compare with database
+            user = User.objects.filter(username__exact = username,password__exact = password)
+            if user:
+                response = HttpResponseRedirect(reverse('intern:index'))
+                #Write username into broser, run-out time 3600 secs
+                response.set_cookie('username',username,3600)
+                return response
+            else:
+                identify = False
+                return render_to_response('intern/login.html', {'uf':uf, 'identify':identify},context_instance=RequestContext(req))
+    else:
+        uf = UserForm()
+    return render_to_response('intern/login.html',{'uf':uf, 'identify':identify},context_instance=RequestContext(req))
+
+#Login successfully
+def index1(req):
+    username = req.COOKIES.get('username','')
+    return render_to_response('intern/index.html' ,{'username':username})
+
+#Logout
+def logout(req):
+    response = HttpResponse('logout !!')
+    #clean up cookies
+    response.delete_cookie('username')
+    return response

@@ -19,7 +19,7 @@
 	<!-- Custom styles for this template -->
 	<link href="{% static 'intern/docs/examples/dashboard/dashboard.css' %}" rel="stylesheet">
 	<link href="{% static 'intern/docs/examples/theme/theme.css' %}" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="{% static 'intern/docs/examples/navbar-fixed-top/navbar-fixed-top.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'intern/docs/examples/navbar-fixed-top.css' %}">
 
 	<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
 	<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -77,7 +77,7 @@
       					</li>
       				</ul>
       				<ul class="nav navbar-nav navbar-right">
-      					<li><a href="./">Login</a></li>
+      					<li><a href="{% url 'intern:login' %}">Login</a></li>
       					<li><a href="./">Help</a></li>
       					<li><a href="./">Contact us<span class="sr-only">(current)</span></a></li>
       				</ul>

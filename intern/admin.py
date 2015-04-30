@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Blog, Wiki, WikiEditHistory
+from .models import Blog, Wiki, WikiEditHistory, User
 from .models import Document
 
 # class Blog(admin.ModelAdmin):
@@ -14,6 +14,7 @@ class WikiEditHistoryInline(admin.TabularInline):
 class WikiAdmin(admin.ModelAdmin):
 	inlines = [WikiEditHistoryInline]
 
+admin.site.register(User)
 admin.site.register(Blog)
 admin.site.register(Document)
 admin.site.register(Wiki, WikiAdmin)

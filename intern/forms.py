@@ -30,3 +30,10 @@ class WikiEditHistoryForm(forms.ModelForm):
 	class Meta:
 		model = WikiEditHistory
 		fields = ['edit_reason']
+
+# --- Register and Login
+# ---------------Register modules-----------------------------------
+#Form
+class UserForm(forms.Form): 
+    username = forms.CharField(label='Username',max_length=100,widget=forms.TextInput(attrs={'class':'form-control', 'id':'inputUsername', 'placeholder':'Username'}))
+    password = forms.CharField(label='Password',widget=forms.PasswordInput(attrs={'class':'form-control','id':'inputPassword','placeholder':'Password'}))
