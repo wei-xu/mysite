@@ -113,6 +113,7 @@
     			<div class="row">
     				<div class="col-md-12">
     					<p class="help-block">this is the little nav bar.</p>
+              {% if not_creating_page %}
     					<ul class="nav navbar-nav-sm nav-tabs">
     						<li role="presentation">
     							<a href="{% url 'intern:wiki_index' wiki_pagename %}">Article</a>
@@ -120,19 +121,25 @@
     						<li role="presentation"  class="active">
     							<a href="{% url 'intern:wiki_edit' wiki_pagename %}">Edit</a>
     						</li>
-    						<li role="presentation">
+    						<!-- <li role="presentation">
     							<a href="{% url 'intern:wiki_view_history' wiki_pagename %}">History</a>
-    						</li>
+    						</li> -->
     					</ul>
+              {% endif %}
     				</div>
     			</div>
     			<div class="row">
     				<div class="col-md-12">
-    					<h2 class="header">Editing "{{ wiki_pagename }}"</h2>
+            {% if not_creating_page %}
+              <h2 class="header">Editing "{{ wiki_pagename }}"</h2>
+            {% else %}
+              <h2 class="header">Creating New Page</h2>
+            {% endif %}
     					<p class="help-block">
     						Every time you make some changes, please specify the reason why you do so.
     					</p>
     					<br />
+              {% if not_creating_page %}
     					<form method="post" action="{% url 'intern:wiki_edit' wiki_pagename %}">
     						{% csrf_token %}
                 			<label for="edit_pagename">Pagename</label>
@@ -146,6 +153,21 @@
     						<br>
     						<button class="btn btn-default btn-sm" type="submit">Save</button>
     					</form>
+              {% else %}
+              <form method="post" action="{% url 'intern:wiki_edit' %}">
+                {% csrf_token %}
+                      <label for="edit_pagename">Pagename</label>
+                        {{ wikiForm.wiki_pagename }}
+                      <br>
+                <label for="editContent">Content</label>
+                  {{ wikiForm.wiki_content }}
+                <br>
+                <label for="edit_reason">Reasons for creating</label>
+                  {{ wikiEditHistoryForm.edit_reason }}
+                <br>
+                <button class="btn btn-default btn-sm" type="submit">Save</button>
+              </form>
+              {% endif %}
     				</div>
     			</div>
     		</div>

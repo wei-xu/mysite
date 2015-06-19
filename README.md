@@ -1,3 +1,16 @@
-# mysite
-django learning
-Building a simple blog website.
+# 实习生管理系统
+
+实习生管理系统目前分为三个部分：
+文件管理，博客，wiki
+
+文件管理：
+1.文件上传下载
+
+博客功能：
+1.浏览博客列表和博客内容
+2.添加博客
+
+
+wiki功能：
+1.浏览wiki词条列表，词条内容
+2.添加/修改词条

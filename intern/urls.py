@@ -22,6 +22,7 @@ urlpatterns = patterns('',
 	# the order of the following 3 lines cannot be reversed,
 	# since the pattern in the 3rd line incorporates that in the 
 	# first 2 lines 
+	url(r'^wiki/edit/create/$', views.wiki_edit, name='wiki_edit'),
 	url(r'^wiki/(?P<wiki_pagename>[\s\S]+)/edit/$', views.wiki_edit, name='wiki_edit'),
 	url(r'^wiki/(?P<wiki_pagename>[\s\S]+)/view_history/$', views.wiki_view_history, name='wiki_view_history'),
 	url(r'^wiki/(?P<wiki_pagename>[\s\S]+?)/', views.wiki_index, name='wiki_index'),
